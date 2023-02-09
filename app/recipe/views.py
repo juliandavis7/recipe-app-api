@@ -34,16 +34,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
   def _params_to_ints(self, qs):
     """Convert a list of strings to integers."""
-    return [int(str_id) for str_id in qs.split(",")]
-
-  def get_serializer_class(self):
-    """Return the serializer class for request."""
-    if self.action == 'list':
-      return serializers.RecipeSerializer
-    elif self.action == 'upload_image':
-      return serializers.RecipeImageSerializer
-
-    return self.serializer_class
+    return [int(str_id) for str_id in qs.split(',')]
 
   def get_queryset(self):
     """Retrieve recipes for authenticated user."""
@@ -58,6 +49,16 @@ class RecipeViewSet(viewsets.ModelViewSet):
       queryset = queryset.filter(ingredients__id__in=ingredient_ids)
 
     return self.queryset.filter(user=self.request.user).order_by('-id').distinct()
+
+  def get_serializer_class(self):
+    """Return the serializer class for request."""
+    if self.action == 'list':
+      return serializers.RecipeSerializer
+    elif self.action == 'upload_image':
+      return serializers.RecipeImageSerializer
+
+    return self.serializer_class
+
 
   def perform_create(self, serializer):
     """Create a new recipe."""
