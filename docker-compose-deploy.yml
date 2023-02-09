@@ -1,10 +1,10 @@
-version: "3.9"
+version: "2.3"
 
 services:
   app:
     build:
       context: .
-    restart:
+    restart: always
     volumes:
       - static-data:/vol/web
     environment:
@@ -27,16 +27,16 @@ services:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASS}
 
-proxy:
-  build:
-    context: ./proxy
-  restart: always
-  depends_on:
-    - app
-  ports:
-    - 8000:8000
-  volumes:
-    - static-data:/vol/static
+  proxy:
+    build:
+      context: ./proxy
+    restart: always
+    depends_on:
+      - app
+    ports:
+      - 8000:8000
+    volumes:
+      - static-data:/vol/static
 
 volumes:
   postgres-data:
